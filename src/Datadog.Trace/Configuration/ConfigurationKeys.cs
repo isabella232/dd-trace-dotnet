@@ -78,6 +78,27 @@ namespace Datadog.Trace.Configuration
         public const string AgentPort = "DD_TRACE_AGENT_PORT";
 
         /// <summary>
+        /// Configuration key for windows named pipe where the Tracer can send traces.
+        /// Default value is <c>null</c>.
+        /// </summary>
+        /// <seealso cref="TracerSettings.TracesWindowsPipeName"/>
+        public const string TracesWindowsPipeName = "DD_APM_WINDOWS_PIPE_NAME";
+
+        /// <summary>
+        /// Configuration key for setting the timeout in milliseconds for windows named pipes communication.
+        /// Default value is <c>0</c>.
+        /// </summary>
+        /// <seealso cref="TracerSettings.TracesWindowsPipeTimeoutMs"/>
+        public const string TracesWindowsPipeTimeoutMs = "DD_APM_WINDOWS_PIPE_TIMEOUT_MS";
+
+        /// <summary>
+        /// Configuration key for the name of the pipe where the Tracer can send metrics.
+        /// Default value is <c>null</c>.
+        /// </summary>
+        /// <seealso cref="TracerSettings.StatsWindowsPipeName"/>
+        public const string StatsWindowsPipeName = "DD_DOGSTATSD_WINDOWS_PIPE_NAME";
+
+        /// <summary>
         /// Sibling setting for <see cref="AgentPort"/>.
         /// Used to force a specific port binding for the Trace Agent.
         /// Default value is 8126.
@@ -237,6 +258,13 @@ namespace Datadog.Trace.Configuration
         /// Default value is <c>true</c> (enabled).
         /// </summary>
         public const string DiagnosticSourceEnabled = "DD_DIAGNOSTIC_SOURCE_ENABLED";
+
+        /// <summary>
+        /// Configuration key for overriding the transport to use for communicating with the trace agent.
+        /// Default value is <c>null</c>.
+        /// Override options available: <c>datadog-tcp</c>, <c>windows-named-pipes</c>
+        /// </summary>
+        public const string TraceTransport = "DD_TRACE_TRANSPORT";
 
         /// <summary>
         /// String format patterns used to match integration-specific configuration keys.
