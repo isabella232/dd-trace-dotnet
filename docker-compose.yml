@@ -61,6 +61,14 @@ services:
     - ACCEPT_EULA=Y
     - SA_PASSWORD=Strong!Passw0rd
 
+  sqledge:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    ports:
+    - "127.0.0.1:1433:1433"
+    environment:
+    - ACCEPT_EULA=Y
+    - SA_PASSWORD=Strong!Passw0rd
+
   wcfservice:
     image: mcr.microsoft.com/dotnet/framework/wcf:4.8
     ports:
@@ -425,7 +433,7 @@ services:
     - stackexchangeredis
     - elasticsearch6
     - elasticsearch5
-    - sqlserver
+    - sqledge
     - mongo
     - postgres
     - mysql
@@ -455,7 +463,7 @@ services:
     - stackexchangeredis
     - elasticsearch6
     - elasticsearch5
-    - sqlserver
+    - sqledge
     - mongo
     - postgres
     - mysql
