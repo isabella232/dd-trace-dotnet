@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Datadog.Trace;
 
@@ -344,16 +345,28 @@ namespace Samples.WebRequest
                 using (Tracer.Instance.StartActive("GetRequestStream"))
                 {
                     // Create separate request objects since .NET Core asserts only one response per request
-                    HttpWebRequest request = (HttpWebRequest)System.Net.WebRequest.Create(GetUrlForTest("GetRequestStream", url));
-                    request.Method = "POST";
+                    HttpWebRequest request = null;
 
-                    if (tracingDisabled)
+                    // Make extra sure GetRequestStream is called from a different context
+                    using (ExecutionContext.SuppressFlow())
                     {
-                        request.Headers.Add(HttpHeaderNames.TracingEnabled, "false");
-                    }
+                        var thread = new Thread(() =>
+                        {
+                            request = (HttpWebRequest)System.Net.WebRequest.Create(GetUrlForTest("GetRequestStream", url));
+                            request.Method = "POST";
 
-                    var stream = request.GetRequestStream();
-                    stream.Write(new byte[1], 0, 1);
+                            if (tracingDisabled)
+                            {
+                                request.Headers.Add(HttpHeaderNames.TracingEnabled, "false");
+                            }
+
+                            var stream = request.GetRequestStream();
+                            stream.Write(new byte[1], 0, 1);
+                        });
+
+                        thread.Start();
+                        thread.Join();
+                    }
 
                     request.GetResponse().Close();
                     Console.WriteLine("Received response for request.GetRequestStream()/GetResponse()");
