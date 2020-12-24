@@ -56,7 +56,7 @@ namespace Datadog.Trace.ClrProfiler
 
                 if (activeScope != null)
                 {
-                    return activeScope.Span.Context;
+                    return null;
                 }
 
                 var span = tracer.StartSpan(OperationName, serviceName: $"{tracer.DefaultServiceName}-{ServiceName}");
